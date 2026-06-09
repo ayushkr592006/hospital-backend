@@ -31,13 +31,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(fileUpload({ useTempFiles: true, tempFileDir: "/tmp/" }));
 
+// ✅ Root route here
+app.get('/', (req, res) => {
+  res.send('Server is running');
+});
+
 app.use("/api/v1/message", messageRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/appointment", appointmentRouter);
 
 app.use(errorMiddleware);
 
-// Connect to database then start server
 dbConnection().then(() => {
   if(process.env.NODE_ENV !== "production") {
     app.listen(process.env.PORT, () => {
