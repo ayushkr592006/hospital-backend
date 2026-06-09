@@ -35,15 +35,15 @@ app.use("/api/v1/message", messageRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/appointment", appointmentRouter);
 
-dbConnection();
-
 app.use(errorMiddleware);
 
-// For local development
-if(process.env.NODE_ENV !== "production") {
-  app.listen(process.env.PORT, () => {
-    console.log(`Server running on port ${process.env.PORT}`);
-  });
-}
+// Connect to database then start server
+dbConnection().then(() => {
+  if(process.env.NODE_ENV !== "production") {
+    app.listen(process.env.PORT, () => {
+      console.log(`Server running on port ${process.env.PORT}`);
+    });
+  }
+});
 
 export default app;
