@@ -1,6 +1,6 @@
 import express from "express";
 import { config } from "dotenv";
-config({ path: "./config/config.env" }); // ✅ Move to top
+config({ path: "./config/config.env" });
 
 import { dbConnection } from "./database/dbConnection.js";
 import cookieParser from "cookie-parser";
@@ -39,8 +39,11 @@ dbConnection();
 
 app.use(errorMiddleware);
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server running on port ${process.env.PORT}`);
-});
+// For local development
+if(process.env.NODE_ENV !== "production") {
+  app.listen(process.env.PORT, () => {
+    console.log(`Server running on port ${process.env.PORT}`);
+  });
+}
 
 export default app;
