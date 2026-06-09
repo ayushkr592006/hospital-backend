@@ -1,14 +1,18 @@
 import mongoose from "mongoose";
 
-export const dbConnection = () => {
-  mongoose
-    .connect(process.env.MONGO_URI, {
+let isConnected = false;
+
+export const dbConnection = async () => {
+  if (isConnected) return;
+  
+  try {
+    await mongoose.connect(process.env.MONGO_URI, {
       dbName: "HospitalManagement",
-    })
-    .then(() => {
-      console.log("Connected to database!");
-    })
-    .catch((err) => {
-      console.log("Some error occured while connecting to database:", err);
+      bufferCommands: false,
     });
+    isConnected = true;
+    console.log("Connected to database!");
+  } catch (err) {
+    console.log("Some error occured while connecting to database:", err);
+  }
 };
